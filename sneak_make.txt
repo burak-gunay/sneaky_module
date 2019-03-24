@@ -1,0 +1,1 @@
+g++ sneaky_process.c -o sneak -std=gnu++11

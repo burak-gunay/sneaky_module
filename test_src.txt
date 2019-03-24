@@ -1,0 +1,2 @@
+Hello,
+I've created this test file after deleting my /etc/passwd file many times. This seems a better approach. Peace!
