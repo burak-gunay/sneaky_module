@@ -46,7 +46,13 @@ void sneaky_process(void) {
     return;
   }
   const char *command = "ls"; // Change this w/ insmod command after its done
-  system(command);
+  system(command);            // Don't need to wait after this
+
+  cout << "Looping until 'q' is received now" << endl;
+  char c = 'a';
+  while (c != 'q') { // Should be enough to loop no?
+    cin >> c;
+  }
 
   // 4th step, this is the part I'm especially confused. After the sneaky module
   // is loaded Read from keyboard 1 char at a time until received 'q'. Program
